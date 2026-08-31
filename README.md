@@ -1,11 +1,5 @@
 # Bulk Downloader for Reddit
 
-[![PyPI Status](https://img.shields.io/pypi/status/bdfr?logo=PyPI)](https://pypi.python.org/pypi/bdfr)
-[![PyPI version](https://img.shields.io/pypi/v/bdfr.svg?logo=PyPI)](https://pypi.python.org/pypi/bdfr)
-[![PyPI downloads](https://img.shields.io/pypi/dm/bdfr?logo=PyPI)](https://pypi.python.org/pypi/bdfr)
-[![AUR version](https://img.shields.io/aur/version/python-bdfr?logo=Arch%20Linux)](https://aur.archlinux.org/packages/python-bdfr)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg?logo=Python)](https://github.com/psf/black)
-
 Bulk Downloader for Reddit (BDFR) downloads submissions or submission data from Reddit. It can archive data, crawl Reddit for research, or download media through an extensive command-line interface. See the [list of supported sources](#list-of-currently-supported-sources) below.
 
 ## Installation
