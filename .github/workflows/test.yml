@@ -1,5 +1,8 @@
 name: Python Test
 
+env:
+  PYTHON_VERSION: "3.14"
+
 on:
   push:
     branches: [ master, development ]
@@ -16,11 +19,11 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
-        python-version: ["3.14"]
+        python-version: ["${{ env.PYTHON_VERSION }}"]
         ext: [.sh]
         include:
         - os: windows-latest
-          python-version: "3.14"
+          python-version: "${{ env.PYTHON_VERSION }}"
           ext: .ps1
     steps:
     - uses: actions/checkout@v3

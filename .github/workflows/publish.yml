@@ -4,15 +4,19 @@ on:
   release:
     types: [created]
 
+env:
+  PYTHON_VERSION: "3.14"
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: Install uv
-        uses: astral-sh/setup-uv@v3
+        # Pinned to a full commit SHA for supply-chain safety (handles UV_PUBLISH_TOKEN).
+        uses: astral-sh/setup-uv@8d55fbecc275b1c35dbe060458839f8d30439ccf
       - name: Set up Python
-        run: uv python install 3.14
+        run: uv python install ${{ env.PYTHON_VERSION }}
       - name: Build and publish
         env:
           UV_PUBLISH_TOKEN: ${{ secrets.UV_PUBLISH_TOKEN }}
