@@ -7,16 +7,10 @@ Bulk Downloader for Reddit (BDFR) downloads submissions or submission data from 
 BDFR requires **Python 3.14 or above**.
 
 ```bash
-python3 -m pip install bdfr --upgrade
+uv tool install bdfr
 ```
 
-or via [pipx](https://pypa.github.io/pipx):
-
-```bash
-python3 -m pipx install bdfr
-```
-
-- **Update**: re-run the install command, or `pipx upgrade bdfr`
+- **Update**: `uv tool install bdfr --force`
 - **Version**: `bdfr --version`
 - **Shell completions**: `bdfr completions`
 
