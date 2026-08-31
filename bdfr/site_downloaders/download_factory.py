@@ -38,9 +38,7 @@ class DownloadFactory:
             return Erome
         elif re.match(r"delayforreddit\.com", sanitised_url):
             return DelayForReddit
-        elif re.match(r"reddit\.com/gallery/.*", sanitised_url):
-            return Gallery
-        elif re.match(r"patreon\.com.*", sanitised_url):
+        elif re.match(r"reddit\.com/gallery/.*", sanitised_url) or re.match(r"patreon\.com.*", sanitised_url):
             return Gallery
         elif re.match(r"reddit\.com/r/", sanitised_url):
             return SelfPost
@@ -82,7 +80,4 @@ class DownloadFactory:
             "php3",
             "xhtml",
         )
-        if re.match(rf'(?i).*/.*\.({"|".join(web_extensions)})$', url):
-            return True
-        else:
-            return False
+        return bool(re.match(rf'(?i).*/.*\.({"|".join(web_extensions)})$', url))

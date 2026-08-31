@@ -183,11 +183,10 @@ class RedditConnector(metaclass=ABCMeta):
 
     def load_config(self):
         self.cfg_parser = configparser.ConfigParser()
-        if self.args.config:
-            if (cfg_path := Path(self.args.config)).exists():
-                self.cfg_parser.read(cfg_path)
-                self.config_location = cfg_path
-                return
+        if self.args.config and (cfg_path := Path(self.args.config)).exists():
+            self.cfg_parser.read(cfg_path)
+            self.config_location = cfg_path
+            return
         possible_paths = [
             Path("./config.cfg"),
             Path("./default_config.cfg"),
@@ -410,13 +409,13 @@ class RedditConnector(metaclass=ABCMeta):
     def create_time_filter(self) -> RedditTypes.TimeType:
         try:
             return RedditTypes.TimeType[self.args.time.upper()]
-        except (KeyError, AttributeError):
+        except KeyError, AttributeError:
             return RedditTypes.TimeType.ALL
 
     def create_sort_filter(self) -> RedditTypes.SortType:
         try:
             return RedditTypes.SortType[self.args.sort.upper()]
-        except (KeyError, AttributeError):
+        except KeyError, AttributeError:
             return RedditTypes.SortType.HOT
 
     def create_download_filter(self) -> DownloadFilter:

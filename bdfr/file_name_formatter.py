@@ -54,7 +54,7 @@ class FileNameFormatter:
         else:
             raise BulkDownloaderException(f"Cannot name object {type(submission).__name__}")
         result = format_string
-        for key in attributes.keys():
+        for key in attributes:
             if re.search(rf"(?i).*{{{key}}}.*", result):
                 key_value = str(attributes.get(key, "unknown"))
                 key_value = FileNameFormatter._convert_unicode_escapes(key_value)
@@ -168,7 +168,7 @@ class FileNameFormatter:
     def find_max_path_length() -> int:
         try:
             return int(subprocess.check_output(["getconf", "PATH_MAX", "/"]))
-        except (ValueError, subprocess.CalledProcessError, OSError):
+        except ValueError, subprocess.CalledProcessError, OSError:
             if platform.system() == "Windows":
                 return FileNameFormatter.WINDOWS_MAX_PATH_LENGTH
             else:
@@ -200,7 +200,7 @@ class FileNameFormatter:
     def validate_string(test_string: str) -> bool:
         if not test_string:
             return False
-        result = any([f"{{{key}}}" in test_string.lower() for key in FileNameFormatter.key_terms])
+        result = any(f"{{{key}}}" in test_string.lower() for key in FileNameFormatter.key_terms)
         if result:
             if "POSTID" not in test_string:
                 logger.warning(

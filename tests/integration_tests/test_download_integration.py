@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 import shutil
 from pathlib import Path
@@ -218,7 +217,7 @@ def test_cli_download_download_filters(test_args: list[str], tmp_path: Path):
     test_args = create_basic_args_for_download_runner(test_args, tmp_path)
     result = runner.invoke(cli, test_args)
     assert result.exit_code == 0
-    assert any((string in result.output for string in ("Download filter removed ", "filtered due to URL")))
+    assert any(string in result.output for string in ("Download filter removed ", "filtered due to URL"))
 
 
 @pytest.mark.online
@@ -413,14 +412,16 @@ def test_cli_download_score_filter(test_args: list[str], was_filtered: bool, tmp
 def test_cli_download_user_reddit_server_error(test_args: list[str], response: int, tmp_path: Path):
     runner = CliRunner()
     test_args = create_basic_args_for_download_runner(test_args, tmp_path)
-    with patch("bdfr.connector.sleep", return_value=None):
-        with patch(
+    with (
+        patch("bdfr.connector.sleep", return_value=None),
+        patch(
             "bdfr.connector.RedditConnector.check_user_existence",
             side_effect=prawcore.exceptions.ResponseException(MagicMock(status_code=response)),
-        ):
-            result = runner.invoke(cli, test_args)
-            assert result.exit_code == 0
-            assert f"received {response} HTTP response" in result.output
+        ),
+    ):
+        result = runner.invoke(cli, test_args)
+        assert result.exit_code == 0
+        assert f"received {response} HTTP response" in result.output
 
 
 @pytest.mark.online

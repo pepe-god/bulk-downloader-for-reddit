@@ -15,19 +15,10 @@ class DownloadFilter:
 
     def check_url(self, url: str) -> bool:
         """Return whether a URL is allowed or not"""
-        if not self._check_extension(url):
-            return False
-        elif not self._check_domain(url):
-            return False
-        else:
-            return True
+        return not (not self._check_extension(url) or not self._check_domain(url))
 
     def check_resource(self, res: Resource) -> bool:
-        if not self._check_extension(res.extension):
-            return False
-        elif not self._check_domain(res.url):
-            return False
-        return True
+        return not (not self._check_extension(res.extension) or not self._check_domain(res.url))
 
     def _check_extension(self, resource_extension: str) -> bool:
         if not self.excluded_extensions:

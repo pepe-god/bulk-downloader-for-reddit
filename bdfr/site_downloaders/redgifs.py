@@ -75,7 +75,7 @@ class Redgifs(BaseDownloader):
                     out.add(response_json["gif"]["urls"]["hd"])
             else:
                 raise KeyError
-        except (KeyError, AttributeError):
+        except KeyError, AttributeError:
             raise SiteDownloaderError("Failed to find JSON data in page")
 
         # Update subdomain if old one is returned

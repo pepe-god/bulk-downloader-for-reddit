@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 import re
 import shutil
@@ -191,11 +190,13 @@ def test_cli_archive_soft_fail(test_args: list[str], tmp_path: Path):
 def test_user_serv_fail(test_args: list[str], response: int, tmp_path: Path):
     runner = CliRunner()
     test_args = create_basic_args_for_archive_runner(test_args, tmp_path)
-    with patch("bdfr.connector.sleep", return_value=None):
-        with patch(
+    with (
+        patch("bdfr.connector.sleep", return_value=None),
+        patch(
             "bdfr.connector.RedditConnector.check_user_existence",
             side_effect=prawcore.exceptions.ResponseException(MagicMock(status_code=response)),
-        ):
-            result = runner.invoke(cli, test_args)
-            assert result.exit_code == 0
-            assert f"received {response} HTTP response" in result.output
+        ),
+    ):
+        result = runner.invoke(cli, test_args)
+        assert result.exit_code == 0
+        assert f"received {response} HTTP response" in result.output

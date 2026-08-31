@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "bdfr"
 description = "Downloads and archives content from reddit"
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.14"
 license = {file = "LICENSE"}
 keywords = ["reddit", "download", "archive",]
 authors = [{name = "Ali Parlakci", email = "parlakciali@gmail.com"}]
@@ -18,9 +18,7 @@ classifiers = [
     "Natural Language :: English",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
 ]
 dependencies = [
     "platformdirs>=4.0.0",
@@ -43,8 +41,7 @@ data-files = {"config" = ["bdfr/default_config.cfg",]}
 [project.optional-dependencies]
 dev = [
     "black>=22.12.0",
-    "Flake8-pyproject>=1.2.2",
-    "isort>=5.11.4",
+    "ruff>=0.8.0",
     "pre-commit>=2.20.0",
     "pytest>=7.1.0",
     "tox>=3.27.1",
@@ -63,20 +60,17 @@ bdfr-download = "bdfr.__main__:cli_download"
 
 [tool.black]
 line-length = 120
-target-version = ["py311"]
+target-version = ["py314"]
 
-[tool.flake8]
-exclude = ["scripts"]
-max-line-length = 120
-show-source = true
-statistics = true
+[tool.ruff]
+line-length = 120
+target-version = "py314"
 
-[tool.isort]
-profile = "black"
-py_version = 311
-multi_line_output = 3
-line_length = 120
-indent = 4
+[tool.ruff.lint]
+select = ["E", "F", "I", "W", "UP", "C4", "SIM"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["bdfr"]
 
 [tool.pytest.ini_options]
 minversion = "7.1"

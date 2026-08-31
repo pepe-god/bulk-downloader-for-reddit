@@ -7,17 +7,11 @@ repos:
     hooks:
       - id: black
 
-  - repo: https://github.com/pycqa/isort
-    rev: 5.11.4
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.16.5
     hooks:
-      - id: isort
-        name: isort (python)
-
-  - repo: https://github.com/pycqa/flake8
-    rev: 6.0.0
-    hooks:
-      - id: flake8
-        additional_dependencies: [Flake8-pyproject]
+      - id: ruff
+        args: [--fix]
 
   - repo: https://github.com/markdownlint/markdownlint
     rev: v0.12.0
