@@ -53,6 +53,7 @@ For a full list of options, run `bdfr download --help`, `bdfr archive --help`, o
 | `--saved` | Use saved posts (requires `--authenticate --user me`) |
 | `--upvoted` | Use upvoted posts (requires `--authenticate --user me`) |
 | `--submitted` | Use user's submissions |
+| `--subscribed` | Use subscribed subreddits as source |
 | `--authenticate` | Use authenticated Reddit session |
 | `--config` | Path to configuration file |
 | `--opts` | Path to YAML options file |
