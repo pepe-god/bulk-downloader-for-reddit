@@ -28,6 +28,7 @@ dependencies = [
     "click>=8.0.0",
     "dict2xml>=1.7.0",
     "praw>=7.2.0,<8",
+    "prawcore>=2.0.0",
     "pyyaml>=5.4.1",
     "requests>=2.25.1",
     "yt-dlp>=2022.11.11",
