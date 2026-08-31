@@ -142,3 +142,6 @@ test_config.cfg
 
 .vscode/
 .idea/
+
+# Kilo agent plans (local, not version-controlled)
+.kilo/plans/
