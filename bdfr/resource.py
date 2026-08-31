@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import _hashlib
 import hashlib
 import logging
 import re
@@ -9,7 +10,6 @@ import urllib.parse
 from collections.abc import Callable
 from typing import Optional
 
-import _hashlib
 import requests
 from praw.models import Submission
 

@@ -16,7 +16,7 @@ Included in this README are a few example Bash tricks to get certain behaviour. 
 
 ## Installation
 
-*Bulk Downloader for Reddit* needs Python version 3.9 or above. Please update Python before installation to meet the requirement.
+*Bulk Downloader for Reddit* needs Python version 3.11 or above. Please update Python before installation to meet the requirement.
 
 Then, you can install it via pip with:
 
