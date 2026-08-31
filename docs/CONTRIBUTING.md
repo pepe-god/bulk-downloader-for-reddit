@@ -183,7 +183,6 @@ uv publish
 Authentication is via a PyPI token:
 
 - `UV_PUBLISH_TOKEN` (or `--token`), which is equivalent to username `__token__` and the token as password.
-- For GitHub Actions / Trusted Publishing, no credentials are set; add a trusted publisher to the PyPI project instead.
 
 `uv publish` automatically discovers and uploads PEP 740 attestations (`.publish.attestation` files) when present. Some indexes reject attestations; pass `--no-attestations` if needed.
 
