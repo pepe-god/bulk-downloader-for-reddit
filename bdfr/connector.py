@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 import configparser
 import importlib.resources
@@ -16,7 +15,7 @@ from enum import Enum, auto
 from pathlib import Path
 from time import sleep
 
-import appdirs
+import platformdirs
 import praw
 import praw.exceptions
 import praw.models
@@ -53,7 +52,7 @@ class RedditTypes:
 class RedditConnector(metaclass=ABCMeta):
     def __init__(self, args: Configuration, logging_handlers: Iterable[logging.Handler] = ()):
         self.args = args
-        self.config_directories = appdirs.AppDirs("bdfr", "BDFR")
+        self.config_directories = platformdirs.user_config_dir("bdfr", "BDFR")
         self.determine_directories()
         self.load_config()
         self.read_config()
@@ -177,18 +176,17 @@ class RedditConnector(metaclass=ABCMeta):
 
     def determine_directories(self):
         self.download_directory = Path(self.args.directory).resolve().expanduser()
-        self.config_directory = Path(self.config_directories.user_config_dir)
+        self.config_directory = Path(self.config_directories)
 
         self.download_directory.mkdir(exist_ok=True, parents=True)
         self.config_directory.mkdir(exist_ok=True, parents=True)
 
     def load_config(self):
         self.cfg_parser = configparser.ConfigParser()
-        if self.args.config:
-            if (cfg_path := Path(self.args.config)).exists():
-                self.cfg_parser.read(cfg_path)
-                self.config_location = cfg_path
-                return
+        if self.args.config and (cfg_path := Path(self.args.config)).exists():
+            self.cfg_parser.read(cfg_path)
+            self.config_location = cfg_path
+            return
         possible_paths = [
             Path("./config.cfg"),
             Path("./default_config.cfg"),
@@ -202,7 +200,7 @@ class RedditConnector(metaclass=ABCMeta):
                 logger.debug(f"Loading configuration from {path}")
                 break
         if not self.config_location:
-            with importlib.resources.path("bdfr", "default_config.cfg") as path:
+            with importlib.resources.as_file(importlib.resources.files("bdfr").joinpath("default_config.cfg")) as path:
                 self.config_location = path
                 shutil.copy(self.config_location, Path(self.config_directory, "default_config.cfg"))
         if not self.config_location:
@@ -411,13 +409,13 @@ class RedditConnector(metaclass=ABCMeta):
     def create_time_filter(self) -> RedditTypes.TimeType:
         try:
             return RedditTypes.TimeType[self.args.time.upper()]
-        except (KeyError, AttributeError):
+        except KeyError, AttributeError:
             return RedditTypes.TimeType.ALL
 
     def create_sort_filter(self) -> RedditTypes.SortType:
         try:
             return RedditTypes.SortType[self.args.sort.upper()]
-        except (KeyError, AttributeError):
+        except KeyError, AttributeError:
             return RedditTypes.SortType.HOT
 
     def create_download_filter(self) -> DownloadFilter:

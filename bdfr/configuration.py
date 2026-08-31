@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 import logging
 from argparse import Namespace
 from pathlib import Path
-from typing import Optional
 
 import click
 import yaml
@@ -14,10 +12,10 @@ logger = logging.getLogger(__name__)
 
 class Configuration(Namespace):
     def __init__(self):
-        super(Configuration, self).__init__()
+        super().__init__()
         self.authenticate = False
         self.config = None
-        self.opts: Optional[str] = None
+        self.opts: str | None = None
         self.directory: str = "."
         self.disable_module: list[str] = []
         self.exclude_id = []
@@ -27,15 +25,15 @@ class Configuration(Namespace):
         self.folder_scheme: str = "{SUBREDDIT}"
         self.ignore_user = []
         self.include_id_file = []
-        self.limit: Optional[int] = None
+        self.limit: int | None = None
         self.link: list[str] = []
-        self.log: Optional[str] = None
+        self.log: str | None = None
         self.make_hard_links = False
         self.max_wait_time = None
         self.multireddit: list[str] = []
         self.no_dupes: bool = False
         self.saved: bool = False
-        self.search: Optional[str] = None
+        self.search: str | None = None
         self.search_existing: bool = False
         self.skip: list[str] = []
         self.skip_domain: list[str] = []
@@ -62,7 +60,7 @@ class Configuration(Namespace):
     def process_click_arguments(self, context: click.Context):
         if context.params.get("opts") is not None:
             self.parse_yaml_options(context.params["opts"])
-        for arg_key in context.params.keys():
+        for arg_key in context.params:
             if not hasattr(self, arg_key):
                 logger.warning(f"Ignoring an unknown CLI argument: {arg_key}")
                 continue

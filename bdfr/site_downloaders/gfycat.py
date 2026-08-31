@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 import json
 import re
-from typing import Optional
 
 from bs4 import BeautifulSoup
 from praw.models import Submission
@@ -18,7 +16,7 @@ class Gfycat(Redgifs):
     def __init__(self, post: Submission):
         super().__init__(post)
 
-    def find_resources(self, authenticator: Optional[SiteAuthenticator] = None) -> list[Resource]:
+    def find_resources(self, authenticator: SiteAuthenticator | None = None) -> list[Resource]:
         return super().find_resources(authenticator)
 
     @staticmethod

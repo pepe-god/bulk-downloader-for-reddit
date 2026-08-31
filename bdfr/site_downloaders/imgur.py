@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 import json
 import re
-from typing import Optional
 
 from praw.models import Submission
 
@@ -18,7 +16,7 @@ class Imgur(BaseDownloader):
         super().__init__(post)
         self.raw_data = {}
 
-    def find_resources(self, authenticator: Optional[SiteAuthenticator] = None) -> list[Resource]:
+    def find_resources(self, authenticator: SiteAuthenticator | None = None) -> list[Resource]:
         self.raw_data = self._get_data(self.post.url)
 
         out = []

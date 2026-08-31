@@ -38,7 +38,7 @@ Someone will review your pull request as soon as possible, but remember that all
 
 ## Preparing the environment for development
 
-Bulk Downloader for Reddit requires Python 3.9 at minimum. First, ensure that your Python installation satisfies this.
+Bulk Downloader for Reddit requires Python 3.11 at minimum. First, ensure that your Python installation satisfies this.
 
 BDfR is built in a way that it can be packaged and installed via `pip`. This places BDfR next to other Python packages and enables you to run the program from any directory. Since it is managed by pip, you can also uninstall it.
 
@@ -51,6 +51,23 @@ python3 -m pip install -e .
 ```
 
 **`-e`** parameter creates a link to that folder. That is, any change inside the folder affects the package immidiately. So, when developing, you can be sure that the package is not stale and Python is always running your latest changes. (Due to this linking, moving/removing/renaming the folder might break it)
+
+#### Using `uv` (recommended)
+
+The project uses [uv](https://github.com/astral-sh/uv) for dependency management and locking. After cloning, set up the environment and install all dependencies (including the development extras) with:
+
+```bash
+uv sync --all-extras
+```
+
+This creates a virtual environment (`.venv`) and installs the exact versions pinned in `uv.lock`. Run any command inside this environment with `uv run`, for example:
+
+```bash
+uv run bdfr --version
+uv run pytest -m "not online and not reddit and not authenticated"
+```
+
+To add or upgrade a dependency, edit `pyproject.toml` and re-run `uv lock --upgrade`.
 
 Then, you can run the program from anywhere in your disk as such:
 

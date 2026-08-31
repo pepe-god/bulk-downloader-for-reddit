@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 import configparser
 import logging
@@ -9,7 +8,9 @@ import socket
 from pathlib import Path
 
 import praw
+import prawcore
 import requests
+from praw.util.token_manager import BaseTokenManager
 
 from bdfr.exceptions import BulkDownloaderException, RedditAuthenticationError
 
@@ -54,7 +55,7 @@ class OAuth2Authenticator:
         client = self.receive_connection()
         data = client.recv(1024).decode("utf-8")
         param_tokens = data.split(" ", 2)[1].split("?", 1)[1].split("&")
-        params = {key: value for (key, value) in [token.split("=") for token in param_tokens]}
+        params = dict([token.split("=") for token in param_tokens])
 
         if state != params["state"]:
             self.send_message(client)
@@ -83,17 +84,17 @@ class OAuth2Authenticator:
 
     @staticmethod
     def send_message(client: socket.socket, message: str = ""):
-        client.send(f"HTTP/1.1 200 OK\r\n\r\n{message}".encode("utf-8"))
+        client.send(f"HTTP/1.1 200 OK\r\n\r\n{message}".encode())
         client.close()
 
 
-class OAuth2TokenManager(praw.reddit.BaseTokenManager):
+class OAuth2TokenManager(BaseTokenManager):
     def __init__(self, config: configparser.ConfigParser, config_location: Path):
-        super(OAuth2TokenManager, self).__init__()
+        super().__init__()
         self.config = config
         self.config_location = config_location
 
-    def pre_refresh_callback(self, authorizer: praw.reddit.Authorizer):
+    def pre_refresh_callback(self, authorizer: prawcore.auth.BaseAuthorizer):
         if authorizer.refresh_token is None:
             if self.config.has_option("DEFAULT", "user_token"):
                 authorizer.refresh_token = self.config.get("DEFAULT", "user_token")
@@ -101,7 +102,7 @@ class OAuth2TokenManager(praw.reddit.BaseTokenManager):
             else:
                 raise RedditAuthenticationError("No auth token loaded in configuration")
 
-    def post_refresh_callback(self, authorizer: praw.reddit.Authorizer):
+    def post_refresh_callback(self, authorizer: prawcore.auth.BaseAuthorizer):
         self.config.set("DEFAULT", "user_token", authorizer.refresh_token)
         with Path(self.config_location).open(mode="w") as file:
             self.config.write(file, True)

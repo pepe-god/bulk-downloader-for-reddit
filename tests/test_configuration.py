@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 from unittest.mock import MagicMock
 
@@ -24,7 +23,7 @@ def test_process_click_context(arg_dict: dict):
     test_context.params = arg_dict
     test_config.process_click_arguments(test_context)
     test_config = vars(test_config)
-    assert all([test_config[arg] == arg_dict[arg] for arg in arg_dict.keys()])
+    assert all(test_config[arg] == arg_dict[arg] for arg in arg_dict)
 
 
 def test_yaml_file_read():

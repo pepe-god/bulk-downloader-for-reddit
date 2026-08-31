@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 import hashlib
 import logging.handlers
@@ -38,7 +37,7 @@ def _calc_hash(existing_file: Path):
 
 class RedditDownloader(RedditConnector):
     def __init__(self, args: Configuration, logging_handlers: Iterable[logging.Handler] = ()):
-        super(RedditDownloader, self).__init__(args, logging_handlers)
+        super().__init__(args, logging_handlers)
         if self.args.search_existing:
             self.master_hash_list = self.scan_existing_files(self.download_directory)
 
@@ -156,7 +155,7 @@ class RedditDownloader(RedditConnector):
     @staticmethod
     def scan_existing_files(directory: Path) -> dict[str, Path]:
         files = []
-        for (dirpath, _dirnames, filenames) in os.walk(directory):
+        for dirpath, _dirnames, filenames in os.walk(directory):
             files.extend([Path(dirpath, file) for file in filenames])
         logger.info(f"Calculating hashes for {len(files)} files")
 

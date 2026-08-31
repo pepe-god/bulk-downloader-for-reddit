@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 import logging
-from typing import Optional
 
 import requests
 from praw.models import Submission
@@ -19,13 +17,13 @@ class Gallery(BaseDownloader):
     def __init__(self, post: Submission):
         super().__init__(post)
 
-    def find_resources(self, authenticator: Optional[SiteAuthenticator] = None) -> list[Resource]:
+    def find_resources(self, authenticator: SiteAuthenticator | None = None) -> list[Resource]:
         try:
             image_urls = self._get_links(self.post.gallery_data["items"])
-        except (AttributeError, TypeError):
+        except AttributeError, TypeError:
             try:
                 image_urls = self._get_links(self.post.crosspost_parent_list[0]["gallery_data"]["items"])
-            except (AttributeError, IndexError, TypeError, KeyError):
+            except AttributeError, IndexError, TypeError, KeyError:
                 logger.error(f"Could not find gallery data in submission {self.post.id}")
                 logger.exception("Gallery image find failure")
                 raise SiteDownloaderError("No images found in Reddit gallery")

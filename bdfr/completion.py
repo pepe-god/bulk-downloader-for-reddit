@@ -1,18 +1,17 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 import subprocess
 from os import environ
 from pathlib import Path
 
-import appdirs
+import platformdirs
 
 
 class Completion:
     def __init__(self, shell: str):
         self.shell = shell
         self.env = environ.copy()
-        self.share_dir = appdirs.user_data_dir()
+        self.share_dir = platformdirs.user_data_dir()
         self.entry_points = ["bdfr", "bdfr-archive", "bdfr-clone", "bdfr-download"]
 
     def install(self):

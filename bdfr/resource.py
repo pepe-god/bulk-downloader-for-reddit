@@ -1,15 +1,13 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
+import _hashlib
 import hashlib
 import logging
 import re
 import time
 import urllib.parse
 from collections.abc import Callable
-from typing import Optional
 
-import _hashlib
 import requests
 from praw.models import Submission
 
@@ -21,9 +19,9 @@ logger = logging.getLogger(__name__)
 class Resource:
     def __init__(self, source_submission: Submission, url: str, download_function: Callable, extension: str = None):
         self.source_submission = source_submission
-        self.content: Optional[bytes] = None
+        self.content: bytes | None = None
         self.url = url
-        self.hash: Optional[_hashlib.HASH] = None
+        self.hash: _hashlib.HASH | None = None
         self.extension = extension
         self.download_function = download_function
         if not self.extension:
@@ -33,7 +31,7 @@ class Resource:
     def retry_download(url: str) -> Callable:
         return lambda global_params: Resource.http_download(url, global_params)
 
-    def download(self, download_parameters: Optional[dict] = None):
+    def download(self, download_parameters: dict | None = None):
         if download_parameters is None:
             download_parameters = {}
         if not self.content:
@@ -51,7 +49,7 @@ class Resource:
     def create_hash(self):
         self.hash = hashlib.md5(self.content)
 
-    def _determine_extension(self) -> Optional[str]:
+    def _determine_extension(self) -> str | None:
         extension_pattern = re.compile(r".*(\..{3,5})$")
         stripped_url = urllib.parse.urlsplit(self.url).path
         match = re.search(extension_pattern, stripped_url)
@@ -59,13 +57,10 @@ class Resource:
             return match.group(1)
 
     @staticmethod
-    def http_download(url: str, download_parameters: dict) -> Optional[bytes]:
+    def http_download(url: str, download_parameters: dict) -> bytes | None:
         headers = download_parameters.get("headers")
         current_wait_time = 60
-        if "max_wait_time" in download_parameters:
-            max_wait_time = download_parameters["max_wait_time"]
-        else:
-            max_wait_time = 300
+        max_wait_time = download_parameters.get("max_wait_time", 300)
         while True:
             try:
                 response = requests.get(url, headers=headers)

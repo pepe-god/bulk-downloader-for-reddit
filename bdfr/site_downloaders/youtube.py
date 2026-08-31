@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 import logging
 import tempfile
 from collections.abc import Callable
 from pathlib import Path
-from typing import Optional
 
 import yt_dlp
 from praw.models import Submission
@@ -22,7 +20,7 @@ class Youtube(BaseDownloader):
     def __init__(self, post: Submission):
         super().__init__(post)
 
-    def find_resources(self, authenticator: Optional[SiteAuthenticator] = None) -> list[Resource]:
+    def find_resources(self, authenticator: SiteAuthenticator | None = None) -> list[Resource]:
         ytdl_options = {
             "format": "best",
             "playlistend": 1,

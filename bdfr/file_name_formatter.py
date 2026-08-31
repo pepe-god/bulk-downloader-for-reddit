@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 import datetime
 import logging
@@ -7,7 +6,6 @@ import platform
 import re
 import subprocess
 from pathlib import Path
-from typing import Optional, Union
 
 from praw.models import Comment, Submission
 
@@ -35,7 +33,7 @@ class FileNameFormatter:
         file_format_string: str,
         directory_format_string: str,
         time_format_string: str,
-        restriction_scheme: Optional[str] = None,
+        restriction_scheme: str | None = None,
     ):
         if not self.validate_string(file_format_string):
             raise BulkDownloaderException(f'"{file_format_string}" is not a valid format string')
@@ -48,7 +46,7 @@ class FileNameFormatter:
         else:
             self.max_path = self.find_max_path_length()
 
-    def _format_name(self, submission: Union[Comment, Submission], format_string: str) -> str:
+    def _format_name(self, submission: Comment | Submission, format_string: str) -> str:
         if isinstance(submission, Submission):
             attributes = self._generate_name_dict_from_submission(submission)
         elif isinstance(submission, Comment):
@@ -56,7 +54,7 @@ class FileNameFormatter:
         else:
             raise BulkDownloaderException(f"Cannot name object {type(submission).__name__}")
         result = format_string
-        for key in attributes.keys():
+        for key in attributes:
             if re.search(rf"(?i).*{{{key}}}.*", result):
                 key_value = str(attributes.get(key, "unknown"))
                 key_value = FileNameFormatter._convert_unicode_escapes(key_value)
@@ -118,7 +116,7 @@ class FileNameFormatter:
         self,
         resource: Resource,
         destination_directory: Path,
-        index: Optional[int] = None,
+        index: int | None = None,
     ) -> Path:
         subfolder = Path(
             destination_directory,
@@ -170,7 +168,7 @@ class FileNameFormatter:
     def find_max_path_length() -> int:
         try:
             return int(subprocess.check_output(["getconf", "PATH_MAX", "/"]))
-        except (ValueError, subprocess.CalledProcessError, OSError):
+        except ValueError, subprocess.CalledProcessError, OSError:
             if platform.system() == "Windows":
                 return FileNameFormatter.WINDOWS_MAX_PATH_LENGTH
             else:
@@ -202,7 +200,7 @@ class FileNameFormatter:
     def validate_string(test_string: str) -> bool:
         if not test_string:
             return False
-        result = any([f"{{{key}}}" in test_string.lower() for key in FileNameFormatter.key_terms])
+        result = any(f"{{{key}}}" in test_string.lower() for key in FileNameFormatter.key_terms)
         if result:
             if "POSTID" not in test_string:
                 logger.warning(
