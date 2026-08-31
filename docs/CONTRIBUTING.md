@@ -88,18 +88,14 @@ The BDFR project uses several tools to manage the code of the project. These inc
 - [black](https://github.com/psf/black)
 - [flake8](https://github.com/john-hen/Flake8-pyproject)
 - [isort](https://github.com/PyCQA/isort)
-- [markdownlint (mdl)](https://github.com/markdownlint/markdownlint)
 - [tox](https://tox.wiki/en/latest/)
-- [pre-commit](https://github.com/pre-commit/pre-commit)
 
-The first four tools are formatters. These change the code to the standards expected for the BDFR project. The configuration details for these tools are contained in the [pyproject.toml](../pyproject.toml) file for the project.
+The first three tools are formatters. These change the code to the standards expected for the BDFR project. The configuration details for these tools are contained in the [pyproject.toml](../pyproject.toml) file for the project.
 
 The tool `tox` is used to run tests and tools on demand and has the following environments:
 
 - `format`
 - `format_check`
-
-The tool `pre-commit` is optional, and runs the three formatting tools automatically when a commit is made. This is **highly recommended** to ensure that all code submitted for this project is formatted acceptably. Note that any PR that does not follow the formatting guide will not be accepted. For information on how to use pre-commit to avoid this, see [the pre-commit documentation](https://pre-commit.com/).
 
 ## Style Guide
 
@@ -157,3 +153,45 @@ When writing tests, ensure that they follow the style guide. The BDFR uses pytes
 If required, use of mocks is expected to simplify tests and reduce the resources or complexity required. Tests should be as small as possible and test as small a part of the code as possible. Comprehensive or integration tests are run with the `click` framework and are located in their own file.
 
 It is also expected that new tests be classified correctly with the marks described above i.e. if a test accesses Reddit through a `reddit_instance` object, it must be given the `reddit` mark. If it requires an authenticated Reddit instance, then it must have the `authenticated` mark.
+
+## Building and Publishing
+
+The BDFR is packaged and published with [uv](https://docs.astral.sh/uv/). The project already declares a `[build-system]` (setuptools), so it builds out of the box.
+
+> **Version is dynamic.** The version is read by setuptools from the `bdfr.__version__` attribute in `bdfr/__init__.py`. Do **not** remove that attribute, and bump the version there (not in `pyproject.toml`) before a release. `uv version` cannot manage a dynamic `attr`-backed version, so the value is edited by hand.
+
+### Building
+
+```bash
+uv build --no-sources
+```
+
+`--no-sources` is recommended when publishing so the package is built as other tools (e.g. `pypa/build`) would, without `tool.uv.sources`. Artifacts land in `dist/` (already gitignored).
+
+### Verifying the build
+
+```bash
+uv run --no-project --with bdfr -- python -c "import bdfr"
+```
+
+### Publishing
+
+```bash
+uv publish
+```
+
+Authentication is via a PyPI token:
+
+- `UV_PUBLISH_TOKEN` (or `--token`), which is equivalent to username `__token__` and the token as password.
+
+`uv publish` automatically discovers and uploads PEP 740 attestations (`.publish.attestation` files) when present. Some indexes reject attestations; pass `--no-attestations` if needed.
+
+### Linting and formatting (no pre-commit)
+
+The `pre-commit` system was removed. Run the formatters and linter through the project environment with `uv run` (so the locked version and `pyproject.toml` config are used) rather than `uvx` (which runs isolated from the project):
+
+```bash
+uv run ruff check --fix bdfr
+uv run black bdfr
+```
+

@@ -7,7 +7,7 @@ Compact guidance for agents working on the Bulk Downloader for Reddit (`bdfr`).
   - `uv sync --all-extras` — create `.venv` and install everything (including dev extras).
   - `uv run <cmd>` — run anything inside the env (e.g. `uv run pytest`, `uv run ruff check bdfr`).
   - Add/upgrade a dep in `pyproject.toml`, then `uv lock --upgrade`.
-- Minimum Python is **3.14** (`requires-python = ">=3.14"`); CI tests 3.14. Do not reintroduce 3.9/3.10/3.11/3.12/3.13 support.
+- Minimum Python is **3.14** (`requires-python = ">=3.14"`); the test suite targets 3.14. Do not reintroduce 3.9/3.10/3.11/3.12/3.13 support.
 - Lint/formatter config lives **in `pyproject.toml`** (`[tool.ruff]` for lint + import sorting, `[tool.black]` for formatting). There is no `.flake8`. ruff/black line-length is 120 (not 79); ruff `target-version = "py314"`, black `target-version = ["py314"]`.
 
 ## Dependencies — hard constraints
@@ -22,8 +22,8 @@ Compact guidance for agents working on the Bulk Downloader for Reddit (`bdfr`).
 ## Testing
 - pytest markers (declared, `--strict-markers`): `online`, `reddit`, `slow`, `authenticated`.
 - Run the offline/local suite with: `uv run pytest -m "not online and not reddit and not authenticated"`.
-- Authenticated/reddit tests need a Reddit token: `devscripts/configure.sh` (or `configure.ps1` on Windows) writes config from the `REDDIT_TOKEN` secret (see `.github/workflows/test.yml`).
-- The test config in CI lints with `ruff check .`; locally run `uv run ruff check bdfr` for the full pyproject-based config.
+- Authenticated/reddit tests need a Reddit token: write a `test_config.cfg` next to `bdfr/default_config.cfg` with `user_token = <token>`.
+- Lint with `uv run ruff check bdfr` for the full pyproject-based config.
 
 ## References
-- Architecture: `docs/ARCHITECTURE.md`. Contribution/style guide and dev setup: `docs/CONTRIBUTING.md`. Pre-commit: `.pre-commit-config.yaml`. Tox: `tox.ini`.
+- Architecture: `docs/ARCHITECTURE.md`. Contribution/style guide and dev setup: `docs/CONTRIBUTING.md`. Tox: `tox.ini`.
