@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 import json
 import re
-from typing import Optional
 
 import requests
 from praw.models import Submission
@@ -18,7 +16,7 @@ class Redgifs(BaseDownloader):
     def __init__(self, post: Submission):
         super().__init__(post)
 
-    def find_resources(self, authenticator: Optional[SiteAuthenticator] = None) -> list[Resource]:
+    def find_resources(self, authenticator: SiteAuthenticator | None = None) -> list[Resource]:
         media_urls = self._get_link(self.post.url)
         return [Resource(self.post, m, Resource.retry_download(m), None) for m in media_urls]
 

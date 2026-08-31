@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 import json
 import logging
@@ -7,7 +6,6 @@ import re
 from collections.abc import Iterable, Iterator
 from pathlib import Path
 from time import sleep
-from typing import Union
 
 import dict2xml
 import praw.models
@@ -27,7 +25,7 @@ logger = logging.getLogger(__name__)
 
 class Archiver(RedditConnector):
     def __init__(self, args: Configuration, logging_handlers: Iterable[logging.Handler] = ()):
-        super(Archiver, self).__init__(args, logging_handlers)
+        super().__init__(args, logging_handlers)
 
     def download(self):
         for generator in self.reddit_lists:
@@ -66,7 +64,7 @@ class Archiver(RedditConnector):
         return [supplied_submissions]
 
     def get_user_data(self) -> list[Iterator]:
-        results = super(Archiver, self).get_user_data()
+        results = super().get_user_data()
         if self.args.user and self.args.all_comments:
             sort = self.determine_sort_function()
             for user in self.args.user:
@@ -75,7 +73,7 @@ class Archiver(RedditConnector):
         return results
 
     @staticmethod
-    def _pull_lever_entry_factory(praw_item: Union[praw.models.Submission, praw.models.Comment]) -> BaseArchiveEntry:
+    def _pull_lever_entry_factory(praw_item: praw.models.Submission | praw.models.Comment) -> BaseArchiveEntry:
         if isinstance(praw_item, praw.models.Submission):
             return SubmissionArchiveEntry(praw_item)
         elif isinstance(praw_item, praw.models.Comment):
@@ -83,7 +81,7 @@ class Archiver(RedditConnector):
         else:
             raise ArchiverError(f"Factory failed to classify item of type {type(praw_item).__name__}")
 
-    def write_entry(self, praw_item: Union[praw.models.Submission, praw.models.Comment]):
+    def write_entry(self, praw_item: praw.models.Submission | praw.models.Comment):
         if self.args.comment_context and isinstance(praw_item, praw.models.Comment):
             logger.debug(f"Converting comment {praw_item.id} to submission {praw_item.submission.id}")
             praw_item = praw_item.submission

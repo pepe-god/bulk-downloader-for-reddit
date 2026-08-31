@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 import logging
-from typing import Optional
 
 import requests
 from praw.models import Submission
@@ -19,7 +17,7 @@ class Gallery(BaseDownloader):
     def __init__(self, post: Submission):
         super().__init__(post)
 
-    def find_resources(self, authenticator: Optional[SiteAuthenticator] = None) -> list[Resource]:
+    def find_resources(self, authenticator: SiteAuthenticator | None = None) -> list[Resource]:
         try:
             image_urls = self._get_links(self.post.gallery_data["items"])
         except (AttributeError, TypeError):
