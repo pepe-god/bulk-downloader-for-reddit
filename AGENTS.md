@@ -26,4 +26,4 @@ Compact guidance for agents working on the Bulk Downloader for Reddit (`bdfr`).
 - The test config in CI lints with `ruff check .`; locally run `uv run ruff check bdfr` for the full pyproject-based config.
 
 ## References
-- Architecture: `docs/ARCHITECTURE.md`. Contribution/style guide and dev setup: `docs/CONTRIBUTING.md`. Pre-commit: `.pre-commit-config.yaml`. Tox: `tox.ini`.
+- Architecture: `docs/ARCHITECTURE.md`. Contribution/style guide and dev setup: `docs/CONTRIBUTING.md`. Tox: `tox.ini`.
