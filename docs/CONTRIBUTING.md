@@ -88,7 +88,6 @@ The BDFR project uses several tools to manage the code of the project. These inc
 - [black](https://github.com/psf/black)
 - [flake8](https://github.com/john-hen/Flake8-pyproject)
 - [isort](https://github.com/PyCQA/isort)
-- [markdownlint (mdl)](https://github.com/markdownlint/markdownlint)
 - [tox](https://tox.wiki/en/latest/)
 
 The first three tools are formatters. These change the code to the standards expected for the BDFR project. The configuration details for these tools are contained in the [pyproject.toml](../pyproject.toml) file for the project.
